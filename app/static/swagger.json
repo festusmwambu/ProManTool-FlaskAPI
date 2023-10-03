@@ -1,0 +1,1182 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Pro-Man-Tool API"
+    },
+    "servers": [
+        {
+            "url": "/api"
+        }
+    ],
+    "paths": {
+        "/priorities": {
+            "get": {
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "schema": {
+                            "type": "string"
+                        }, 
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "Priorities"
+                ],
+                "description": "Returns priorities list",
+                "responses": {
+                    "200": {
+                        "description": "Returns an array of priorities",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "results": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Priority"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "requestBody": {
+                    "required": true,
+                    "description": "Log into an existing account",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type":"object",
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Auth"
+                ],
+                "description": "Login with existing user credentials",
+                "responses": {
+                    "200": {
+                        "description": "Returns user session",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "token": {
+                                            "type": "string"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        },
+                                        "username": {
+                                            "type": "string"
+                                        },
+                                        "id": {
+                                            "type": "number"
+                                        },
+                                        "password": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing required parameters"
+                    },
+                    "401": {
+                        "description": "Invalid password"
+                    },
+                    "404": {
+                        "description": "User does not exist"
+                    }
+                }
+            }
+        },
+        "/auth/signup": {
+            "post": {
+                "requestBody": {
+                    "required": true,
+                    "description": "Create a new account",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Auth"
+                ],
+                "description": "Create a new user account",
+                "responses": {
+                    "200": {
+                        "description": "Returns a new user account",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type":"object",
+                                    "properties": {
+                                        "token": {
+                                            "type": "string"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        },
+                                        "username": {
+                                            "type": "string"
+                                        },
+                                        "id": {
+                                            "type": "number"
+                                        },
+                                        "password": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing required parameters"
+                    }
+                }
+            }
+        },
+        "/auth/reconnect": {
+            "post": {
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "description": "Verify if the token is still valid, and return a new one",
+                "responses": {
+                    "200": {
+                        "description": "Verify if the token is still valid, and return a new one",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "username": {
+                                            "type": "string"
+                                        },
+                                        "id": {
+                                            "type": "number"
+                                        },
+                                        "token": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/boards": {
+            "description": "Returns all boards owned by an user",
+            "get": {
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "schema": {
+                            "type": "string"
+                        }, 
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "Boards"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns all the boards an user has.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Board"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid token"
+                    },
+                    "401": {
+                        "description": "Unauthorized, missing token"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Boards"
+                ],
+                "description": "Create a new board",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "boardName": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Returns a new board",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "boardName": {
+                                            "type": "string"
+                                        },
+                                        "boardId": {
+                                            "type": "string"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing required parameters || Invalid token"
+                    },
+                    "401": {
+                        "description": "Unauthorized, missing token"
+                    }
+                }
+            }
+        },
+        "/boards/{boardId}": {
+            "get": {
+                "description": "Returns a board and all its info",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    },
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "description": "Board id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "Boards"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return info from a specific board",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Board"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid token || Missing parameters"
+                    },
+                    "401": {
+                        "description": "Unauthorized, missing token"
+                    },
+                    "403": {
+                        "description": "You can't perform this action"
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a board, and all its lists and tasks",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    },
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "Boards"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Board, all its lists and tasks were deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid token || Missing parameters"
+                    },
+                    "401": {
+                        "description": "Unauthorized, missing token"
+                    },
+                    "403": {
+                        "description": "You can't perform this action"
+                    },
+                    "404": {
+                        "description": "Board not found"
+                    }
+                }
+            }
+        },
+        "/boards/{boardId}/lists": {
+            "get": {
+                "description": "Returns all board's lists",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    },
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "description": "Board id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "Boards"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns all board's lists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/List"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "400": {
+                "description": "Invalid token || Missing parameters"
+            },
+            "401": {
+                "description": "Unauthorized, missing token"
+            },
+            "403": {
+                "description": "You can't perform this action"
+            }
+        }
+    },
+    "post": {
+        "tags": [
+            "Boards"
+        ],
+        "description": "Create a new list in a board",
+        "parameters": [
+            {
+                "in": "header",
+                "name": "token",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            {
+                "in": "path",
+                "name": "boardId",
+                "required": true,
+                "description": "Board id",
+                "schema": {
+                    "type": "string"
+                }
+            }
+        ],
+        "requestBody": {
+            "required": true,
+            "description": "List title",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "title": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "responses": {
+            "200": {
+                "description": "Returns a new board",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "boardName": {
+                                    "type": "string"
+                                },
+                                "boardId": {
+                                    "type": "string"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "400": {
+                "description": "Invalid token"
+            },
+            "401": {
+                "description": "Missing required parameters || Unauthorized, missing token" 
+            }
+        }
+    },
+    "/lists/{listId}": {
+        "get": {
+            "description": "Return a list and its tasks",
+            "parameters": [
+                {
+                    "in": "header",
+                    "name": "token",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    }
+                },
+                {
+                    "in": "path",
+                    "name": "listId",
+                    "description": "List id",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "required": true
+                }
+            ],
+            "tags": [
+                "Lists"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Returns a list and its tasks",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/List"
+                            }
+                        }
+                    }
+                },
+                "403": {
+                    "description": "You can't perform this action"
+                }
+            }
+        },
+        "delete": {
+            "description": "Delete a list and its tasks",
+            "parameters": [
+                {
+                    "in": "header",
+                    "name": "token",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    }
+                },
+                {
+                    "in": "path",
+                    "name": "listId",
+                    "description": "List id",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "required": true
+                }
+            ],
+            "tags": [
+                "Lists"
+            ],
+            "responses": {
+                "200": {
+                    "description": "List and all its tasks deleted successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "msg": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "403": {
+                    "description": "You can't perform this action"
+                },
+                "404": {
+                    "description": "List not found"
+                }
+            }
+        }
+    },
+    "/lists/{listId}/title": {
+        "path": {
+            "description": "Update list's title",
+            "parameters": [
+                {
+                    "in": "path",
+                    "name": "listId",
+                    "description": "List id",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "required": true
+                },
+                {
+                    "in": "header",
+                    "name": "token",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "requestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "title": {
+                                    "type": "string",
+                                    "description": "New title of the list"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "tags": [
+                "Lists"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Title updated successfully for the list"
+                },
+                "400": {
+                    "description": "Missing required parameters || New title for the list cannot be the same as the  old one." 
+                },
+                "403": {
+                    "description": "You can't perform this action"
+                }, 
+                "404": {
+                    "description": "List not found"
+                }
+            }
+        }
+    },
+    "/lists/{listId}/task": {
+        "post": {
+            "tags": [
+                "Lists"
+            ],
+            "description": "Create a new task in the list",
+            "parameters": [
+                {
+                    "in": "header",
+                    "name": "token",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    }
+                },
+                {
+                    "in": "path",
+                    "name": "listId",
+                    "required": true,
+                    "description": "List id",
+                    "schema": {
+                        "type": "number"
+                    }
+                }
+            ],
+            "requestBody": {
+                "required": true,
+                "description": "Task title",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "title": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "Returns a new task",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "number"
+                                    },
+                                    "uid": {
+                                        "type": "string"
+                                    },
+                                    "title": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Missing required parameters || Invalid token"
+                },
+                "401": {
+                    "description": "Unauthorized, missing token"
+                },
+                "403": {
+                    "description": "You can't perform this action"
+                }
+            }
+        }
+    },
+    "/tasks/{taskId}": {
+        "get": {
+            "description": "Returns a task by its id",
+            "parameters": [
+                {
+                    "in": "path",
+                    "name": "taskId",
+                    "description": "Task id",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "required": true
+                },
+                {
+                    "in": "header",
+                    "name": "token",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "tags": [
+                "Tasks"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Returns a task",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Task"
+                            }
+                        }
+                    }
+                },
+                "403": {
+                    "description": "You can't perform this action"
+                }
+            }
+        },
+        "delete": {
+            "description": "Deletes a task",
+            "parameters": [
+                {
+                    "in": "path",
+                    "name": "taskId",
+                    "description": "Task id",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "required": true
+                },
+                {
+                    "in": "header",
+                    "name": "token",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "tags": [
+                "Tasks"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Task deleted successfully"
+                },
+                "403": {
+                    "description": "You can't perform this action"
+                }
+            }
+        }
+    },
+    "/tasks/{taskId}/list": {
+        "patch": {
+            "description": "Move a task to another list",
+            "parameters": [
+                {
+                    "in": "path",
+                    "name": "taskId",
+                    "description": "Task id",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "required": true
+                },
+                {
+                    "in": "header",
+                    "name": "token",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "requestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "listId": {
+                                    "type": "number",
+                                    "description": "Destination list"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "tags": [
+                "Tasks"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Task updated successfully"
+                },
+                "400": {
+                    "description": "Missing required parameters"
+                },
+                "403": {
+                    "description": "You can't perform this action"
+                }
+            }
+        }
+    },
+    "/tasks/{taskId}/description": {
+        "patch": {
+            "description": "Update task's description",
+            "parameters": [
+                {
+                    "in": "path",
+                    "name": "id",
+                    "description": "Task id",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "required": true
+                },
+                {
+                    "in": "header",
+                    "name": "token",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "requestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "description": {
+                                    "type": "string",
+                                    "description": "New description"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "tags": [
+                "Tasks"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Task updated successfully"
+                },
+                "400": {
+                    "description": "Missing required parameters || New description can't be the same as the existing description"
+                },
+                "403": {
+                    "description": "You can't perform this action"
+                }
+            }
+        }
+    },
+    "/tasks/{taskId}/title": {
+        "patch": {
+            "description": "Update task's title",
+            "parameters": [
+                {
+                    "in": "path",
+                    "name": "taskId",
+                    "description": "Task id",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "required": true
+                },
+                {
+                    "in": "header",
+                    "name": "token",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "requestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "description": {
+                                    "type": "string",
+                                    "description": "New title"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "tags": [
+                "Tasks"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Task updated successfully"
+                },
+                "400": {
+                    "description": "Missing required parameters || New title can't be the same as the existing title"
+                },
+                "403": {
+                    "description": "You can't perform this action"
+                }
+            }
+        }
+    },
+    "/tasks/{taskId}/priority": {
+        "patch": {
+            "description": "Update task's priority",
+            "parameters": [
+                {
+                    "in": "path",
+                    "name": "taskId",
+                    "description": "Task id",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "required": true
+                },
+                {
+                    "in": "header",
+                    "name": "token",
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "requestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "description": {
+                                    "type": "number",
+                                    "description": "New priority id"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "tags": [
+                "Tasks"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Task updated successfully"
+                },
+                "400": {
+                    "description": "Missing required parameters || New priority can't be the same as the existing priority"
+                },
+                "403": {
+                    "description": "You can't perform this action"
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Priority": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "number"
+                    },
+                    "value": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Task": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "number"
+                    },
+                    "user_id": {
+                        "type": "number"
+                    },
+                    "list_id": {
+                        "type": "number"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "uid": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "datetime"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "priority": {
+                        "$ref": "#/components/schemas/Priority"
+                    }
+                }
+            },
+            "List": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "number"
+                    },
+                    "user_id": {
+                        "type": "number"
+                    },
+                    "board_id": {
+                        "type": "number"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "tasks": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Task"
+                        }
+                    }
+                }
+            },
+            "Board": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "number"
+                    },
+                    "user_id": {
+                        "type": "number"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "lists": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/List"
+                        }
+                    }
+                }
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "number"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "datetime"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Auth"
+        },
+        {
+            "name": "Priorities"
+        },
+        {
+            "name": "Boards"
+        },
+        {
+            "name": "Lists"
+        },
+        {
+            "name": "Tasks"
+        }
+    ]
+}
