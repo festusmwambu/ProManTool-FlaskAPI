@@ -5,7 +5,9 @@
 .venv
 venv
 .env
+instance
 dump.rdb
+
 
 
 
