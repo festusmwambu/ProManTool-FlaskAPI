@@ -65,4 +65,4 @@ urllib3==2.0.6
 watchdog==3.0.0
 Werkzeug
 wrapt==1.15.0
-zipp==3.17.0
+zipp
