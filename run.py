@@ -16,6 +16,9 @@ from app.routes.task_routes import blueprint_task
 from app.routes.priority_routes import blueprint_priority
 from app.config import DevelopmentConfig
 
+# =============================================================================================================================
+# This module contains the code that is used for running Flask app in development environment mode.
+# =============================================================================================================================
 
 # Load environment variables from .env file
 load_dotenv(join(dirname(__file__), pardir, '.env'))
@@ -51,4 +54,4 @@ if __name__=="__main__":
     app = create_app()
     app.app_context().push() # Push the app context
     db.create_all() # Create the database tables
-    app.run() # Run the application in debug mode
+    app.run(debug=True) # Run the application in development environment mode
