@@ -51,4 +51,4 @@ if __name__=="__main__":
     app = create_app()
     app.app_context().push() # Push the app context
     db.create_all() # Create the database tables
-    app.run(debug=True) # Run the application in debug mode
+    app.run() # Run the application in debug mode
