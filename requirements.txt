@@ -40,7 +40,6 @@ mdurl
 more-itertools
 ordered-set
 packaging==23.2
-pkg_resources
 platformdirs
 pluggy
 psycopg2-binary==2.9.8
