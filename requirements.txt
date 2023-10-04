@@ -1,5 +1,5 @@
 appdirs==1.4.4
-astroid==3.0.0
+astroid
 async-timeout==4.0.3
 atomicwrites==1.4.1
 attrs==23.1.0
